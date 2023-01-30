@@ -817,15 +817,8 @@ public class Player : NSObject, AVAudioPlayerDelegate {
         self.playing = false
         self.currentTimeTimer?.invalidate()
         #if os(iOS)
+        self.showNotification(show: false)
         self._deinit()
-        #endif
-        NotificationCenter.default.removeObserver(self)
-        self.observerStatus.forEach {
-            $0.invalidate()
-        }
-        self.observerStatus.removeAll()
-        #if os(iOS)
-        self.nowPlayingInfo.removeAll()
         #endif
         self.player = nil
     }
