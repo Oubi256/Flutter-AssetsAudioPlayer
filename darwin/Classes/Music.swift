@@ -700,9 +700,6 @@ public class Player : NSObject, AVAudioPlayerDelegate {
                 if(value.timeControlStatus == AVPlayer.TimeControlStatus.playing){
                     self?.playing = true;
                     self?.updateNotifStatus(playing: true, stopped: false, rate: self?.player?.rate)
-                }else if(value.timeControlStatus == AVPlayer.TimeControlStatus.paused){
-                    self?.playing = false;
-                    self?.updateNotifStatus(playing: false, stopped: false, rate: 0)
                 }else{
                     self?.playing = false;
                     self?.updateNotifStatus(playing: false, stopped: false, rate: 0)
@@ -811,11 +808,12 @@ public class Player : NSObject, AVAudioPlayerDelegate {
         self.player?.pause()
         self.player?.rate = 0.0
         
-        self.updateNotifStatus(playing: self.playing, stopped: true, rate: self.player?.rate)
+        //self.updateNotifStatus(playing: self.playing, stopped: true, rate: self.player?.rate)
         
         self.player?.seek(to: CMTime.zero)
         self.playing = false
         self.currentTimeTimer?.invalidate()
+        self.channel.invokeMethod(Music.METHOD_CURRENT, arguments: nil)
         #if os(iOS)
         self.showNotification(show: false)
         self._deinit()
